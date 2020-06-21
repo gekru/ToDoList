@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -58,6 +60,13 @@ namespace ToDoList.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Define current user Id
+                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                // Find user from DB
+                IdentityUser currentUser = _context.Users.FirstOrDefault(x => x.Id == currentUserId);
+                // Associate current user with model user
+                toDo.User = currentUser;
+
                 _context.Add(toDo);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
