@@ -24,7 +24,12 @@ namespace ToDoList.Controllers
         // GET: ToDoes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.ToDos.ToListAsync());
+            // Define current user Id
+            string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // Find user from DB
+            IdentityUser currentUser = _context.Users.FirstOrDefault(x => x.Id == currentUserId);
+            // Current user's ToDoList
+            return View(await _context.ToDos.Where(x => x.User == currentUser).ToListAsync());
         }
 
         // GET: ToDoes/Details/5
