@@ -34,10 +34,16 @@ namespace ToDoList.Controllers
 
             return currentUser;
         }
+
         // GET: ToDoes
         public async Task<IActionResult> Index()
         {
             return View(await _context.ToDos.Where(x => x.User == GetCurrentUser()).ToListAsync());
+        }
+
+        public IActionResult BuildToDoTable()
+        {
+            return PartialView("_ToDoTable", _context.ToDos.Where(x => x.User == GetCurrentUser()).ToList());
         }
 
         // GET: ToDoes/Details/5
@@ -82,7 +88,7 @@ namespace ToDoList.Controllers
             }
             return View(toDo);
         }
-
+       
         // GET: ToDoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
