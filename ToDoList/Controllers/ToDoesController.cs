@@ -35,15 +35,25 @@ namespace ToDoList.Controllers
             return currentUser;
         }
 
-        // GET: ToDoes
-        public async Task<IActionResult> Index()
+        /// <summary>
+        /// Get the current user ToDoList
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<ToDo> GetMyToDos()
         {
-            return View(await _context.ToDos.Where(x => x.User == GetCurrentUser()).ToListAsync());
+            GetCurrentUser();
+            return _context.ToDos.Where(x => x.User == GetCurrentUser()).ToList();
+        }
+
+        // GET: ToDoes
+        public IActionResult Index()
+        {
+            return View();
         }
 
         public IActionResult BuildToDoTable()
         {
-            return PartialView("_ToDoTable", _context.ToDos.Where(x => x.User == GetCurrentUser()).ToList());
+            return PartialView("_ToDoTable", GetMyToDos());
         }
 
         // GET: ToDoes/Details/5
