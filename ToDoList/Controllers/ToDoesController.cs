@@ -21,15 +21,23 @@ namespace ToDoList.Controllers
             _context = context;
         }
 
-        // GET: ToDoes
-        public async Task<IActionResult> Index()
+        /// <summary>
+        /// Get the current application user
+        /// </summary>
+        /// <returns></returns>
+        public IdentityUser GetCurrentUser()
         {
             // Define current user Id
             string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             // Find user from DB
             IdentityUser currentUser = _context.Users.FirstOrDefault(x => x.Id == currentUserId);
-            // Current user's ToDoList
-            return View(await _context.ToDos.Where(x => x.User == currentUser).ToListAsync());
+
+            return currentUser;
+        }
+        // GET: ToDoes
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.ToDos.Where(x => x.User == GetCurrentUser()).ToListAsync());
         }
 
         // GET: ToDoes/Details/5
@@ -65,12 +73,8 @@ namespace ToDoList.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Define current user Id
-                string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                // Find user from DB
-                IdentityUser currentUser = _context.Users.FirstOrDefault(x => x.Id == currentUserId);
                 // Associate current user with model user
-                toDo.User = currentUser;
+                toDo.User = GetCurrentUser();
 
                 _context.Add(toDo);
                 await _context.SaveChangesAsync();
