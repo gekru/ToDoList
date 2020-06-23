@@ -1,5 +1,4 @@
-﻿@model List<ToDoList.Models.ToDo>
-
+﻿@model ToDoList.Models.ToDo
 
 @{
     ViewData["Title"] = "Index";
@@ -13,6 +12,27 @@
 
 <div id="todo-table"></div>
 
+<div id="todoCreateForm">
+
+    @*@using (Html.BeginForm("InstantCreate", "ToDoes", FormMethod.Post))
+        {
+            <input asp-for="Description" class="form-control" />
+        }*@
+
+    <form asp-action="Create" asp-controller="ToDoes"
+          method="POST"
+          data-ajax="true"
+          data-ajax-mode="replace"
+          data-ajax-update="#content">
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            <input asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+    </form>
+</div>
+
 @section Scripts{
     <script src="~/js/BuildTable.js"></script>
 }
+

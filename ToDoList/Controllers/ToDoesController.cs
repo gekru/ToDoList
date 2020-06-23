@@ -41,8 +41,7 @@ namespace ToDoList.Controllers
         /// <returns></returns>
         private IEnumerable<ToDo> GetMyToDos()
         {
-            GetCurrentUser();
-            return _context.ToDos.Where(x => x.User == GetCurrentUser()).ToList();
+            return _context.ToDos.ToList().Where(x => x.User == GetCurrentUser());
         }
 
         // GET: ToDoes
@@ -50,7 +49,7 @@ namespace ToDoList.Controllers
         {
             return View();
         }
-
+        
         public IActionResult BuildToDoTable()
         {
             return PartialView("_ToDoTable", GetMyToDos());
@@ -98,7 +97,26 @@ namespace ToDoList.Controllers
             }
             return View(toDo);
         }
-       
+
+        #region TODO! PARTIALVIEW
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> InstantCreate([Bind("Id,Description")] ToDo toDo)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Associate current user with model user
+        //        toDo.User = GetCurrentUser();
+        //        // IsDone uqual to false such as todo just created
+        //        toDo.IsDone = false;
+
+        //        _context.Add(toDo);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    return BuildToDoTable();
+        //}
+        #endregion
+
         // GET: ToDoes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
