@@ -49,7 +49,7 @@ namespace ToDoList.Controllers
         {
             return View();
         }
-        
+
         public IActionResult BuildToDoTable()
         {
             return PartialView("_ToDoTable", GetMyToDos());
@@ -166,6 +166,29 @@ namespace ToDoList.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(toDo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InstantEdit(int? id, bool value)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var toDo = await _context.ToDos.FindAsync(id);
+            if (toDo == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                toDo.IsDone = value;
+                _context.Update(toDo);
+                await _context.SaveChangesAsync();
+                return PartialView("_ToDoTable", GetMyToDos());
+            }
+            //return View(toDo);
         }
 
         // GET: ToDoes/Delete/5

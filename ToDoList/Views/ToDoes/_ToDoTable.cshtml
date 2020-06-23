@@ -20,7 +20,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IsDone)
+                    @Html.CheckBoxFor(modelItem => item.IsDone, new { id = item.Id, @class="ActiveCheck"})
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -31,3 +31,5 @@
         }
     </tbody>
 </table>
+
+<script src="~/js/CheckBox.js"></script>
