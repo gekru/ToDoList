@@ -1,13 +1,22 @@
 ﻿@model IEnumerable<ToDoList.Models.ToDo>
 
+<div id="progressBarToDo">
+    <p>@(ViewBag.Percent)%</p>
+    <div class="progress" style="height: 2rem">
+        <div class="progress-bar" role="progressbar"
+             style="width: @(Html.Encode(ViewBag.Percent))%">@(Html.Encode(ViewBag.Percent))%</div>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
+            <th width="10%">
+                <img src="https://img.icons8.com/material-outlined/24/000000/checked-2.png" />
+                @Html.DisplayNameFor(model => model.IsDone)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsDone)
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th></th>
         </tr>
@@ -17,11 +26,22 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @Html.CheckBoxFor(modelItem => item.IsDone, new { id = item.Id, @class = "ActiveCheck" })
                 </td>
+
                 <td>
-                    @Html.CheckBoxFor(modelItem => item.IsDone, new { id = item.Id, @class="ActiveCheck"})
+                    @if (!item.IsDone)
+                    {
+                        @Html.DisplayFor(modelItem => item.Description)
+                    }
+                    else
+                    {
+                        <div class="completed-todo">
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </div>
+                    }
                 </td>
+
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |

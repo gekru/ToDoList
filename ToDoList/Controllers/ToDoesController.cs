@@ -41,7 +41,18 @@ namespace ToDoList.Controllers
         /// <returns></returns>
         private IEnumerable<ToDo> GetMyToDos()
         {
-            return _context.ToDos.ToList().Where(x => x.User == GetCurrentUser());
+            IEnumerable<ToDo> myToDoes = _context.ToDos.ToList().Where(x => x.User == GetCurrentUser());
+
+            int completeCount = 0;
+            foreach (var todo in myToDoes)
+            {
+                if (todo.IsDone)
+                {
+                    completeCount++;
+                }
+            }
+            ViewBag.Percent = 100 * completeCount / myToDoes.Count();
+            return myToDoes;
         }
 
         // GET: ToDoes
